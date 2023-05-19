@@ -8,8 +8,9 @@
  * @author rabirabichannel
  */
 public class test {
-    
+
     public static void main(String[] args) {
         System.out.println("ini sebuah ujian");
+        System.out.println("wuwung");
     }
 }
