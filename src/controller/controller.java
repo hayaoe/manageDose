@@ -73,7 +73,7 @@ public class controller {
     
     public boolean setNick(String nick){
         
-        String query = "insert into user (nickname) values (?)";
+        String query = "insert into user (nickname) values (?) where username=?";
         
         try {
             prepared.executeUpdate(query);
@@ -85,5 +85,25 @@ public class controller {
             response = false;
         }
         return response;
+    }
+    
+    public boolean setTarget(String targetName, Date date, String category, int uid){
+        
+        String query = "insert into target (nama, tanggal, kategori, uid) values (?, ?, ?, ?)";
+        
+        try {
+            prepared.executeUpdate(query);
+            prepared.setString(1,targetName);
+            prepared.setDate(2,date);
+            prepared.setString(3,category);
+            prepared.setInt(4,uid);
+            
+            response = true;
+        } catch (SQLException ex) {
+            Logger.getLogger(controller.class.getName()).log(Level.SEVERE, null, ex);
+            response = false;
+        }
+        return response;
+        
     }
 }
