@@ -4,10 +4,33 @@
  */
 package Targets;
 
+import Time.Date;
+
 /**
  *
  * @author ABUKU
  */
 abstract class Target {
     
+    String targetName;
+    Date date;
+    String category;
+    int status;
+    
+    public String getTargetName(){
+        return this.targetName;
+    }
+    
+    public String getCategory(){
+        return this.category;
+    }
+    
+    public Date getDate(){
+        return this.date;
+    }
+    
+    public int getStatus(){
+        return this.status;
+    }
+        
 }

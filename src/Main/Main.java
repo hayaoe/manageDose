@@ -66,7 +66,7 @@ public class Main {
         
         if (index !=-1) {
             
-            if (users.get(index).getPassword().equals(password.toString())) {
+            if (users.get(index).getPassword().equals(password)) {
                 match = index;
                 System.out.println(match);
             }
@@ -109,7 +109,6 @@ public class Main {
         try(FileWriter file = new FileWriter("user.json")){
             file.write(jarray.toJSONString());
         }catch(IOException e ){
-            e.printStackTrace();
         }
         
     }
@@ -127,9 +126,7 @@ public class Main {
             
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParseException ex) {
+        } catch (IOException | ParseException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -139,6 +136,7 @@ public class Main {
         String username = (String) uListObj.get("Username");
         String password = (String) uListObj.get("Password");
         String nick = (String) uListObj.get("Nick");
+
         
         User updateUser = new User(username, password,nick);
         users.add(updateUser);
