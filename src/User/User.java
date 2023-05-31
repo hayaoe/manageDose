@@ -1,6 +1,7 @@
 package User;
 import Targets.*;
 import java.util.ArrayList;
+import org.json.simple.JSONObject;
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
@@ -13,10 +14,17 @@ import java.util.ArrayList;
 public class User {
     
     private String Username, Password, Nick;
-    private TargetBoolean targetBoolean;
-    private TargetShared targetShared;
-    private TargetTimer targetTimer;
-    private User friends;
+    
+    public User(String name, String pass, String nick){
+        this.Username = name;
+        this.Password = pass;
+        this.Nick = nick;
+    }
+    
+    public User(){
+        
+    }
+   
 
     public String getUsername() {
         return Username;
@@ -62,8 +70,15 @@ public class User {
         
     }
     
-    public void addFriend(User user){
-        friends = user;
+    public JSONObject toJsonObject(){
+        JSONObject jobject = new JSONObject();
+        jobject.put("Username", Username);
+        jobject.put("Password", Password);
+        jobject.put("Nick", Nick);
+        
+        JSONObject User = new JSONObject();
+        User.put("user", jobject);
+        return User;
     }
     
     
