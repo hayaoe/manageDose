@@ -4,6 +4,13 @@
  */
 package Pane;
 
+import Main.MainMenu;
+import Targets.TargetBoolean;
+import User.User;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.Date;
+
 /**
  *
  * @author Willas Tobing
@@ -13,8 +20,25 @@ public class Calendar_Panel extends javax.swing.JFrame {
     /**
      * Creates new form Calendar_Panel
      */
+    
+    User logged = new User("test1","1","test1");
+    MainMenu main = new MainMenu();
+    TargetBoolean data;
+    String name, pass;
     public Calendar_Panel() {
         initComponents();
+    } 
+    
+    public void passingUser(String name, String pass, String nick){
+        this.name = name;
+        this.pass = pass;
+        main.startSession(name, pass);
+        
+    }
+    
+    public void addNewTargetBoolean(String targetName, String category, Date dueDate){
+        System.out.println(logged.getUsername());
+        logged.addTargetBoolean(targetName, category, dueDate);
     }
 
     /**
@@ -26,23 +50,59 @@ public class Calendar_Panel extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jButton1 = new javax.swing.JButton();
         customCalendar1 = new Pane.CustomCalendar();
+        boolAdd = new javax.swing.JButton();
+
+        jButton1.setText("jButton1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        setResizable(false);
+
+        boolAdd.setText("Add Target Boolean");
+        boolAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                boolAddActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(customCalendar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(customCalendar1, javax.swing.GroupLayout.PREFERRED_SIZE, 916, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(boolAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 8, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(customCalendar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(customCalendar1, javax.swing.GroupLayout.PREFERRED_SIZE, 566, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(boolAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void boolAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boolAddActionPerformed
+        // TODO add your handling code here:
+        InputTargetCheck ITC = new InputTargetCheck();
+        ITC.setVisible(true);
+        
+        ITC.addWindowListener(new WindowAdapter(){
+            @Override
+            public void windowClosed(WindowEvent e){
+                TargetBoolean data = ITC.returnData();
+                
+                main.saveBoolTarget(data.getTargetName(), data.getCategory(), data.getDate());
+                
+            }
+        });
+    }//GEN-LAST:event_boolAddActionPerformed
 
     /**
      * @param args the command line arguments
@@ -80,6 +140,8 @@ public class Calendar_Panel extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton boolAdd;
     private Pane.CustomCalendar customCalendar1;
+    private javax.swing.JButton jButton1;
     // End of variables declaration//GEN-END:variables
 }

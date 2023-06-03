@@ -3,8 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Targets;
-
-import Time.Date;
+import java.util.Date;
 import org.json.simple.JSONObject;
 
 /**
@@ -46,6 +45,7 @@ public class TargetBoolean extends Target {
         jobject.put("date", date);
         jobject.put("category", category);
         jobject.put("status", status);
+        jobject.put("UID", UID);
         
         JSONObject targetShared = new JSONObject();
         targetShared.put("targetBool", jobject);

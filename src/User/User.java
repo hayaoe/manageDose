@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,7 +25,7 @@ import org.json.simple.parser.ParseException;
  */
 public class User {
 
-    private String Username, Password, Nick;
+    private String Username, Password, Nick, UID;
     private LinkedList<TargetBoolean> listBool;
     private LinkedList<TargetTimer> listTimer;
     private LinkedList<TargetShared> listShared;
@@ -33,12 +34,10 @@ public class User {
         this.listBool = new LinkedList<>();
         this.listTimer = new LinkedList<>();
         this.listShared = new LinkedList<>();
-        String path = this.Username+"target.json";
-        read(path);
         this.Username = name;
         this.Password = pass;
         this.Nick = nick;
-        save();
+        
     }
 
     public User() {
@@ -74,16 +73,28 @@ public class User {
         this.Nick = newNick;
     }
 
-    public void addTargetBoolean() {
-
+    public void addTargetBoolean(String targetName, String category, Date dueDate) {
+        TargetBoolean newTBool;
+        newTBool = new TargetBoolean(targetName,dueDate,category);
+        listBool.add(newTBool);
+        
+        saveBoolean();
+        String path = this.Username+"target.json";
+        read(path);
     }
 
     public void addTargetShared() {
 
     }
 
-    public void addTargetTimer() {
-
+    public void addTargetTimer(String targetName, String category, Date dueDate, long hour, long minute) {
+        TargetTimer newTimer;
+        newTimer = new TargetTimer(targetName,dueDate,category, hour, minute);
+        listTimer.add(newTimer);
+        
+        saveBoolean();
+        String path = this.Username+"target.json";
+        read(path);
     }
 
     public void deleteTarget() {
@@ -95,33 +106,59 @@ public class User {
         jobject.put("Username", Username);
         jobject.put("Password", Password);
         jobject.put("Nick", Nick);
+        jobject.put("UID", UID);
 
         JSONObject User = new JSONObject();
         User.put("user", jobject);
         return User;
     }
     
-    private void save(){
+    private void saveTimer(){
         
-        String filename = this.Username+"target.json";
-        JSONArray jbool = new JSONArray();
-        JSONArray jshare = new JSONArray();
+        String filename = this.Username+"TimerTarget.json";
+        
         JSONArray jtimer = new JSONArray();
-        
-        for (int i = 0; i < listBool.size(); i++) {
-            jbool.add(listBool.get(i).toJsonObject());
-        }
-        for (int i = 0; i < listShared.size(); i++) {
-            jshare.add(listShared.get(i).toJsonObject());
-        }
+
         for (int i = 0; i < listTimer.size(); i++) {
             jtimer.add(listTimer.get(i).toJsonObject());
         }
         
         try(FileWriter file = new FileWriter(filename)){
-            file.write(jbool.toJSONString());
-            file.write(jshare.toJSONString());
             file.write(jtimer.toJSONString());
+        }catch(IOException e ){
+        }
+        
+    }
+    
+    private void saveBoolean(){
+        
+        String filename = this.Username+"BoolTarget.json";
+        JSONArray jbool = new JSONArray();
+        
+        for (int i = 0; i < listBool.size(); i++) {
+            jbool.add(listBool.get(i).toJsonObject());
+        }
+        
+        try(FileWriter file = new FileWriter(filename)){
+            file.write(jbool.toJSONString());
+        }catch(IOException e ){
+        }
+        
+    }
+    
+    private void saveShared(){
+        
+        String filename = this.Username+"SharedTarget.json";
+
+        JSONArray jshare = new JSONArray();
+
+
+        for (int i = 0; i < listShared.size(); i++) {
+            jshare.add(listShared.get(i).toJsonObject());
+        }
+        
+        try(FileWriter file = new FileWriter(filename)){
+            file.write(jshare.toJSONString());
         }catch(IOException e ){
         }
         

@@ -4,7 +4,8 @@
  */
 package Targets;
 
-import Time.Date;
+
+import java.util.Date;
 import org.json.simple.JSONObject;
 
 /**
@@ -17,10 +18,11 @@ public class TargetShared extends Target{
         
     }
     
-    public TargetShared(String name, Date date, String category){
+    public TargetShared(String name, Date date, String category, String UID){
         this.targetName = name;
         this.date = date;
         this.category = category;
+        this.UID = UID;
         this.status=-1;
     }
     
@@ -30,6 +32,7 @@ public class TargetShared extends Target{
         jobject.put("date", date);
         jobject.put("category", category);
         jobject.put("status", status);
+        jobject.put("UID", UID);
         
         JSONObject targetShared = new JSONObject();
         targetShared.put("targetShared", jobject);

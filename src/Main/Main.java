@@ -1,6 +1,7 @@
 package Main;
 
 
+import Pane.Calendar_Panel;
 import User.User;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -61,18 +62,21 @@ public class Main {
         
         int match = -1;
         int index = findUser(username);
-        System.out.println(username);
-        System.out.println(password);
         
         if (index !=-1) {
             
             if (users.get(index).getPassword().equals(password)) {
                 match = index;
-                System.out.println(match);
+                
             }
         }
         
         return match;
+    }
+    
+    public void userPassing(String username, String password){
+        Calendar_Panel cPanel = new Calendar_Panel();
+        cPanel.passingUser(username, password, username);
     }
     
     private int findUser(String username){

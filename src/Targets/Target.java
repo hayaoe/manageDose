@@ -4,7 +4,9 @@
  */
 package Targets;
 
-import Time.Date;
+import java.util.Date;
+
+
 
 /**
  *
@@ -12,7 +14,7 @@ import Time.Date;
  */
 abstract class Target {
     
-    String targetName;
+    String targetName, UID;
     Date date;
     String category;
     int status;

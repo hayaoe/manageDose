@@ -4,8 +4,9 @@
  */
 package Targets;
 
-import Time.Date;
+
 import java.time.LocalTime;
+import java.util.Date;
 import org.json.simple.JSONObject;
 
 /**
@@ -14,10 +15,14 @@ import org.json.simple.JSONObject;
  */
 public class TargetTimer extends Target {
     
-    LocalTime duration;
+    long durHour, durMin;
     
-    public void setDuration(LocalTime newTime){
-        this.duration = newTime;
+    public void setDurHour(long Hour){
+        this.durHour = Hour;
+    }
+    
+    public void setDurMin( long minute){
+        this.durMin = minute;
     }
     
     public void setName(String newName){
@@ -36,19 +41,24 @@ public class TargetTimer extends Target {
         this.status = newStatus;
     }
     
-    public LocalTime getDuration(){
-        return this.duration;
+    public long getDurationHour(){
+        return this.durHour;
+    }
+    
+    public long getDurationMin(){
+        return this.durMin;
     }
     
     public TargetTimer(){
         
     }
     
-    public TargetTimer(String name, Date date, String category, LocalTime duration){
+    public TargetTimer(String name, Date date, String category, long hour, long minute){
         this.targetName = name;
         this.date = date;
         this.category = category;
-        this.duration = duration;
+        this.durHour = hour;
+        this.durMin = minute;
         this.status=-1;
     }
     
@@ -57,7 +67,8 @@ public class TargetTimer extends Target {
         jobject.put("name", targetName);
         jobject.put("date", date);
         jobject.put("category", category);
-        jobject.put("duration", duration);
+        jobject.put("durHour", durHour);
+        jobject.put("durMin", durMin);
         jobject.put("status", status);
         
         JSONObject targetShared = new JSONObject();
