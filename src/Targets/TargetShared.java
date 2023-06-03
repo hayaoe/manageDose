@@ -18,7 +18,7 @@ public class TargetShared extends Target{
         
     }
     
-    public TargetShared(String name, Date date, String category, String UID){
+    public TargetShared(String name, String date, String category){
         this.targetName = name;
         this.date = date;
         this.category = category;

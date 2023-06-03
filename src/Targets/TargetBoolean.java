@@ -16,7 +16,7 @@ public class TargetBoolean extends Target {
         this.targetName = newName;
     }
     
-    public void setDate(Date newDate){
+    public void setDate(String newDate){
         this.date = newDate;
     }
     
@@ -32,7 +32,7 @@ public class TargetBoolean extends Target {
         
     }
     
-    public TargetBoolean(String name, Date date, String category){
+    public TargetBoolean(String name, String date, String category){
         this.targetName = name;
         this.date = date;
         this.category = category;

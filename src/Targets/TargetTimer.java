@@ -29,7 +29,7 @@ public class TargetTimer extends Target {
         this.targetName = newName;
     }
     
-    public void setDate(Date newDate){
+    public void setDate(String newDate){
         this.date = newDate;
     }
     
@@ -53,7 +53,7 @@ public class TargetTimer extends Target {
         
     }
     
-    public TargetTimer(String name, Date date, String category, long hour, long minute){
+    public TargetTimer(String name, String date, String category, long hour, long minute){
         this.targetName = name;
         this.date = date;
         this.category = category;

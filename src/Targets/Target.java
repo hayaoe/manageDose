@@ -15,7 +15,7 @@ import java.util.Date;
 abstract class Target {
     
     String targetName, UID;
-    Date date;
+    String date;
     String category;
     int status;
     
@@ -27,7 +27,7 @@ abstract class Target {
         return this.category;
     }
     
-    public Date getDate(){
+    public String getDate(){
         return this.date;
     }
     

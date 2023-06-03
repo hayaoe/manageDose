@@ -32,10 +32,17 @@ public class MainMenu {
         save();
     }
     
-    public void saveBoolTarget(String name, String category, Date date){
+    public void saveBoolTarget(String name, String category, String date){
         
         read();
         session.addTargetBoolean(name, category, date);
+        save();
+    }
+    
+    public void saveTimerTarget(String name, String category, String date, long hour, long min){
+        
+        read();
+        session.addTargetTimer(name, category, date, hour, min);
         save();
     }
     

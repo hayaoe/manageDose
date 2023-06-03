@@ -73,27 +73,32 @@ public class User {
         this.Nick = newNick;
     }
 
-    public void addTargetBoolean(String targetName, String category, Date dueDate) {
+    public void addTargetBoolean(String targetName, String category, String dueDate) {
         TargetBoolean newTBool;
         newTBool = new TargetBoolean(targetName,dueDate,category);
         listBool.add(newTBool);
         
         saveBoolean();
-        String path = this.Username+"target.json";
+        String path = this.Username+"BoolTarget.json";
         read(path);
     }
 
-    public void addTargetShared() {
+    public void addTargetShared(TargetShared target) {
 
+        listShared.add(target);
+        
+        saveShared();
+        String path = this.Username+"SharedTarget.json";
+        read(path);
     }
 
-    public void addTargetTimer(String targetName, String category, Date dueDate, long hour, long minute) {
+    public void addTargetTimer(String targetName, String category, String dueDate, long hour, long minute) {
         TargetTimer newTimer;
         newTimer = new TargetTimer(targetName,dueDate,category, hour, minute);
         listTimer.add(newTimer);
         
-        saveBoolean();
-        String path = this.Username+"target.json";
+        saveTimer();
+        String path = this.Username+"TimerTarget.json";
         read(path);
     }
 
