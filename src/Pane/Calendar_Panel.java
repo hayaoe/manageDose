@@ -91,7 +91,7 @@ public class Calendar_Panel extends javax.swing.JFrame {
             }
 
             String targets[] = {dataBool.getTargetName(), dataBool.getDate(), dataBool.getCategory(), status, dataBool.getUID()};
-            tabelBool.addRow(targets);
+            tabelShared.addRow(targets);
         }
     }
 
