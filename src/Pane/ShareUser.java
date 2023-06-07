@@ -4,6 +4,10 @@
  */
 package Pane;
 
+import Main.MainMenu;
+import User.User;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author rabirabichannel
@@ -15,6 +19,38 @@ public class ShareUser extends javax.swing.JFrame {
      */
     public ShareUser() {
         initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+    }
+    
+    MainMenu main = new MainMenu();
+    
+    public void refreshTable(){
+        
+        String colNameShared[] = {"username"};
+            DefaultTableModel tabelShared = new DefaultTableModel(colNameShared, 0);
+            Userstable.setModel(tabelShared);
+            
+        for (Object usernameList : main.getUsernameList()) {
+            String username = (String) usernameList;
+            System.out.println("dia masu sini");
+            String targets[] = {username};
+            tabelShared.addRow(targets);
+        }
+    }
+    
+    String name;
+    public void returnValue(String Username){
+        name = Username;
+    }
+    
+    public void passinData(String Uid){
+        refreshTable();
+    }
+    
+    
+    public String returnData(){
+        return name;
     }
 
     /**
@@ -29,27 +65,23 @@ public class ShareUser extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         Userstable = new javax.swing.JTable();
-        select = new javax.swing.JButton();
         back = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         Userstable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
+
             },
             new String [] {
-                "UID", "Users"
+                "Users"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class
+                java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false
+                false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -68,15 +100,7 @@ public class ShareUser extends javax.swing.JFrame {
         jScrollPane1.setViewportView(Userstable);
         if (Userstable.getColumnModel().getColumnCount() > 0) {
             Userstable.getColumnModel().getColumn(0).setResizable(false);
-            Userstable.getColumnModel().getColumn(1).setResizable(false);
         }
-
-        select.setText("select");
-        select.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                selectActionPerformed(evt);
-            }
-        });
 
         back.setText("back");
         back.addActionListener(new java.awt.event.ActionListener() {
@@ -89,12 +113,10 @@ public class ShareUser extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(back, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(select, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
+                .addComponent(back, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -102,9 +124,7 @@ public class ShareUser extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 392, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(back, javax.swing.GroupLayout.DEFAULT_SIZE, 58, Short.MAX_VALUE)
-                    .addComponent(select, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(back, javax.swing.GroupLayout.DEFAULT_SIZE, 58, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -124,14 +144,17 @@ public class ShareUser extends javax.swing.JFrame {
 
     private void UserstableMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_UserstableMousePressed
         // TODO add your handling code here:
+         int row = Userstable.getSelectedRow();
+        String username = Userstable.getValueAt(row, 0).toString();
+        System.out.println("ini username yang didapat "+username);
+        returnValue(username);
+        dispose();
     }//GEN-LAST:event_UserstableMousePressed
-
-    private void selectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_selectActionPerformed
 
     private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
         // TODO add your handling code here:
+        
+        dispose();
     }//GEN-LAST:event_backActionPerformed
 
     /**
@@ -174,6 +197,5 @@ public class ShareUser extends javax.swing.JFrame {
     private javax.swing.JButton back;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JButton select;
     // End of variables declaration//GEN-END:variables
 }

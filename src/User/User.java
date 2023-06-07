@@ -31,7 +31,6 @@ public class User {
     private LinkedList<TargetShared> listShared;
 
     
-    private LinkedList<Target> listTarget;
     public User(String name, String pass, String nick) {
        
         this.listBool = new LinkedList<>();
@@ -41,7 +40,7 @@ public class User {
         this.Username = name;
         this.Password = pass;
         this.Nick = nick;
-        this.UID = generatorUID();
+        this.UID = null;
         
     }
     
@@ -54,35 +53,46 @@ public class User {
         
     }
     
-    private String generatorUID(){
-        UUID randomId = UUID.randomUUID();
-
-        // Mengonversi UUID menjadi string
-        String idString = randomId.toString();
-        return idString;
+    public void SharedReadSave(){
+        String path = this.Username+"SharedTarget.json";
+        readShared(path);
+        saveShared(this.Username);
     }
     
     public void readSave(){
         
-        String path = this.Username+"BoolTarget.json";
+        String path = this.Username+"SharedTarget.json";
+//        readShared(path);
+        path = this.Username+"BoolTarget.json";
         readBool(path);
         path = this.Username+"TimerTarget.json";
         readTimer(path);
         saveBoolean();
         saveTimer();
+//        saveShared(this.Username);
         System.out.println(listBool.size());
         System.out.println(listTimer.size());
+        
     }
     
     public void SaveRead(){
-        saveBoolean();
-        saveTimer();
+       
+        
+      
         System.out.println(listBool.size());
         System.out.println(listTimer.size());
-        String path = this.Username+"BoolTarget.json";
+        System.out.println(listTimer.size());
+        String path = this.Username+"SharedTarget.json";
+        readShared(path);
+        path = this.Username+"BoolTarget.json";
         readBool(path);
         path = this.Username+"TimerTarget.json";
         readTimer(path);
+        saveBoolean();
+        saveTimer();
+        saveShared(this.Username);
+
+        
     }
 
     public User() {
@@ -130,13 +140,15 @@ public class User {
         readBool(path);
     }
 
-    public void addTargetShared(TargetShared target) {
-
-        listShared.add(target);
+    public void addTargetShared(TargetShared target, String username) {
+        String path = username+"SharedTarget.json";
+        readShared(path);
         
-        saveShared();
-        String path = this.Username+"SharedTarget.json";
-//        read(path);
+        listShared.add(target);
+
+        saveShared(username);
+        path = username+"SharedTarget.json";
+        readShared(path);
     }
 
     public void addTargetTimer(String targetName, String category, String dueDate, int hour, int minute) {
@@ -181,7 +193,7 @@ public class User {
         return User;
     }
     
-    private void saveTimer(){
+    public void saveTimer(){
         
         String filename = this.Username+"TimerTarget.json";
         
@@ -198,7 +210,7 @@ public class User {
         
     }
     
-    private void saveBoolean(){
+    public void saveBoolean(){
         
         String filename = this.Username+"BoolTarget.json";
         JSONArray jbool = new JSONArray();
@@ -214,15 +226,15 @@ public class User {
         
     }
     
-    private void saveShared(){
+    public void saveShared(String path){
         
-        String filename = this.Username+"SharedTarget.json";
-
+        String filename = path+"SharedTarget.json";
         JSONArray jshare = new JSONArray();
 
 
         for (int i = 0; i < listShared.size(); i++) {
             jshare.add(listShared.get(i).toJsonObject());
+            System.out.println(listShared.size());
         }
         
         try(FileWriter file = new FileWriter(filename)){
@@ -325,8 +337,12 @@ public class User {
         String pemilik = (String) uListObj.get("owner");
         String id = (String) uListObj.get("UID");
 
+        System.out.println("name :"+ name);
+        System.out.println("Kateg : "+ kategory);
+        System.out.println("owner : "+ pemilik);
+        System.out.println("ini parse Shared");
         
-        TargetShared updateShared = new TargetShared(name, date,kategory, id, pemilik);
+        TargetShared updateShared = new TargetShared(name, date,kategory, pemilik);
         listShared.add(updateShared);
     }
     

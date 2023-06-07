@@ -19,13 +19,16 @@ public class TargetShared extends Target{
         
     }
     
-    public TargetShared(String name, String date, String category, String UID, String owner){
+    public TargetShared(String name, String date, String category, String owner){
         this.targetName = name;
         this.date = date;
         this.category = category;
-        this.UID = UID;
         this.status=-1;
         this.owner = owner;
+    }
+    
+    public String getOwner(){
+        return owner;
     }
     
     @Override
@@ -36,7 +39,6 @@ public class TargetShared extends Target{
         jobject.put("category", category);
         jobject.put("status", status);
         jobject.put("owner",owner);
-        jobject.put("UID", UID);
         
         JSONObject targetShared = new JSONObject();
         targetShared.put("targetShared", jobject);

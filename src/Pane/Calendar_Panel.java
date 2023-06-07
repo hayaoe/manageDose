@@ -7,6 +7,7 @@ package Pane;
 import Main.MainMenu;
 import Pane.editCheckTarget.Datas;
 import Targets.TargetBoolean;
+import Targets.TargetShared;
 import Targets.TargetTimer;
 import User.User;
 import java.awt.event.WindowAdapter;
@@ -28,6 +29,7 @@ public class Calendar_Panel extends javax.swing.JFrame {
         initComponents();
         refreshTableTimer();
         refreshTableBool();
+        refreshTableShared();
 
     }
 
@@ -74,23 +76,27 @@ public class Calendar_Panel extends javax.swing.JFrame {
             String targets[] = {dataBool.getTargetName(), dataBool.getDate(), dataBool.getCategory(), status, dataBool.getUID()};
             tabelBool.addRow(targets);
         }
+        
     }
     
     private void refreshTableShared() {
         User session = main.getUser();
         String status;
-        String colNameShared[] = {"Target", "Tanggal", "Category", "Status", "From"};
+        
+       
+        String colNameShared[] = {"Target", "Tanggal", "Category", "Status", "Owner"};
         DefaultTableModel tabelShared = new DefaultTableModel(colNameShared, 0);
-        TargetTable.setModel(tabelShared);
+        System.out.println(session.getShared().size());
+        SharedTable.setModel(tabelShared);
         for (int i = 0; i < session.getShared().size(); i++) {
-            TargetBoolean dataBool = (TargetBoolean) session.getBool().get(i);
-            if (dataBool.getStatus() != 1) {
+            TargetShared dataShared = (TargetShared) session.getShared().get(i);
+            if (dataShared.getStatus() != 1) {
                 status = "not Finished";
             } else { 
                 status = "Finished";
             }
 
-            String targets[] = {dataBool.getTargetName(), dataBool.getDate(), dataBool.getCategory(), status, dataBool.getUID()};
+            String targets[] = {dataShared.getTargetName(), dataShared.getDate(), dataShared.getCategory(), status, dataShared.getOwner()};
             tabelShared.addRow(targets);
         }
     }
@@ -104,6 +110,7 @@ public class Calendar_Panel extends javax.swing.JFrame {
             if (temp.getUID().equals(UID)) {
                 temp.setStatus(1);
                 session.getBool().set(i, temp);
+                session.saveBoolean();
             }
         }
 
@@ -112,10 +119,11 @@ public class Calendar_Panel extends javax.swing.JFrame {
             if (temp2.getUID().equals(UID)) {
                 temp2.setStatus(1);
                 session.getTimer().set(i, temp2);
+                session.saveTimer();
             }
         }
 
-        session.SaveRead();
+        
     }
 
     private void boolUpdate(String UID, String newName, String newCat) {
@@ -131,7 +139,8 @@ public class Calendar_Panel extends javax.swing.JFrame {
 
             }
         }
-        session.SaveRead();
+        session.saveBoolean();
+        
     }
 
     private void timerUpdate(String UID, String newName, String newCat, int newHour, int newMinute) {
@@ -149,7 +158,7 @@ public class Calendar_Panel extends javax.swing.JFrame {
 
             }
         }
-        session.SaveRead();
+        session.saveTimer();
     }
 
     private TargetBoolean boolGetter(String UID) {
@@ -203,7 +212,40 @@ public class Calendar_Panel extends javax.swing.JFrame {
             }
         }
 
-        session.SaveRead();
+      session.saveBoolean();
+      session.saveTimer();
+    }
+    
+    private void setShareBool(String uid, String username){
+        User session = main.getUser();
+        TargetBoolean temp2 = null;
+        TargetShared target = null;
+
+        for (int i = 0; i < session.getBool().size(); i++) {
+            temp2 = (TargetBoolean) session.getBool().get(i);
+            if (temp2.getUID().equals(uid)) {
+                target = new TargetShared(temp2.getTargetName(), temp2.getDate(), temp2.getCategory(), username);
+                System.out.println(target.getTargetName()+" ini nama target Shared");
+            }
+        }
+        main.getUser().addTargetShared(target, username);
+        session.SharedReadSave();
+    }
+    
+    private void setShareTimer(String uid, String username){
+        User session = main.getUser();
+        TargetTimer temp = null;
+        TargetShared target = null;
+
+        for (int i = 0; i < session.getTimer().size(); i++) {
+            temp = (TargetTimer) session.getTimer().get(i);
+            if (temp.getUID().equals(uid)) {
+                target = new TargetShared(temp.getTargetName(), temp.getDate(), temp.getCategory(), username);
+                System.out.println(target.getTargetName()+" ini nama target Shared");
+            }
+        }
+        main.getUser().addTargetShared(target, username);
+         session.SharedReadSave();
     }
 
     
@@ -229,7 +271,7 @@ public class Calendar_Panel extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        TimerTable1 = new javax.swing.JTable();
+        SharedTable = new javax.swing.JTable();
         selectTarget = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         customCalendar1 = new Pane.CustomCalendar();
@@ -358,12 +400,12 @@ public class Calendar_Panel extends javax.swing.JFrame {
 
         jLabel2.setText("Time Targets");
 
-        TimerTable1.setModel(new javax.swing.table.DefaultTableModel(
+        SharedTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Target", "Tanggal", "Kategori", "Status", "Durasi"
+                "Target", "Tanggal", "Kategori", "Status", "Owner"
             }
         ) {
             Class[] types = new Class [] {
@@ -381,14 +423,14 @@ public class Calendar_Panel extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        TimerTable1.getTableHeader().setReorderingAllowed(false);
-        jScrollPane4.setViewportView(TimerTable1);
-        if (TimerTable1.getColumnModel().getColumnCount() > 0) {
-            TimerTable1.getColumnModel().getColumn(0).setResizable(false);
-            TimerTable1.getColumnModel().getColumn(1).setResizable(false);
-            TimerTable1.getColumnModel().getColumn(2).setResizable(false);
-            TimerTable1.getColumnModel().getColumn(3).setResizable(false);
-            TimerTable1.getColumnModel().getColumn(4).setResizable(false);
+        SharedTable.getTableHeader().setReorderingAllowed(false);
+        jScrollPane4.setViewportView(SharedTable);
+        if (SharedTable.getColumnModel().getColumnCount() > 0) {
+            SharedTable.getColumnModel().getColumn(0).setResizable(false);
+            SharedTable.getColumnModel().getColumn(1).setResizable(false);
+            SharedTable.getColumnModel().getColumn(2).setResizable(false);
+            SharedTable.getColumnModel().getColumn(3).setResizable(false);
+            SharedTable.getColumnModel().getColumn(4).setResizable(false);
         }
 
         selectTarget.setText("openTarget");
@@ -493,6 +535,51 @@ public class Calendar_Panel extends javax.swing.JFrame {
 
     private void shareBtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_shareBtActionPerformed
         // TODO add your handling code here:
+        String select = recent.getText();
+
+        if (select.equals("TargetBoolean")) {
+            if (main.readSelectedBool() != null) {
+                ShareUser SU = new ShareUser();
+                TargetBoolean target = main.readSelectedBool();
+                String uid = target.getUID();
+
+                SU.passinData(uid);
+                SU.setVisible(true);
+                SU.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosed(WindowEvent e) {
+
+                        String datas = SU.returnData();
+
+                        setShareBool(uid, datas);
+                        refreshTableTimer();
+                        refreshTableBool();
+                        refreshTableShared();
+                    }
+                });
+            }
+        } else if (select.equals("TargetTimer")) {
+            if (main.readSelectedTimer() != null) {
+                ShareUser SU = new ShareUser();
+
+                TargetTimer target = main.readSelectedTimer();
+                String uid = target.getUID();
+
+                SU.passinData(uid);
+                SU.setVisible(true);
+                SU.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosed(WindowEvent e) {
+                        
+                        String datas = SU.returnData();
+                        setShareTimer(uid, datas);
+                        refreshTableTimer();
+                        refreshTableBool();
+                        refreshTableShared();
+                    }
+                });
+            }
+        }
 
 
     }//GEN-LAST:event_shareBtActionPerformed
@@ -511,6 +598,7 @@ public class Calendar_Panel extends javax.swing.JFrame {
                 main.saveBoolTarget(data.getTargetName(), data.getCategory(), data.getDate());
                 refreshTableTimer();
                 refreshTableBool();
+                refreshTableShared();
             }
         });
 
@@ -531,6 +619,7 @@ public class Calendar_Panel extends javax.swing.JFrame {
                 main.saveTimerTarget(data.getTargetName(), data.getCategory(), data.getDate(), data.getDurationHour(), data.getDurationMin());
                 refreshTableTimer();
                 refreshTableBool();
+                refreshTableShared();
             }
         });
 
@@ -571,6 +660,7 @@ public class Calendar_Panel extends javax.swing.JFrame {
                         boolUpdate(uid, datas.getName(), datas.getKategori());
                         refreshTableTimer();
                         refreshTableBool();
+                        refreshTableShared();
                     }
                 });
             }
@@ -597,6 +687,7 @@ public class Calendar_Panel extends javax.swing.JFrame {
 
                         refreshTableTimer();
                         refreshTableBool();
+                        refreshTableShared();
                     }
                 });
             }
@@ -636,6 +727,7 @@ public class Calendar_Panel extends javax.swing.JFrame {
 
                         refreshTableTimer();
                         refreshTableBool();
+                        refreshTableShared();
                     }
                 });
             }
@@ -676,6 +768,7 @@ public class Calendar_Panel extends javax.swing.JFrame {
 
                         refreshTableTimer();
                         refreshTableBool();
+                        refreshTableShared();
                     }
                 });
             }
@@ -707,6 +800,7 @@ public class Calendar_Panel extends javax.swing.JFrame {
 
             refreshTableTimer();
             refreshTableBool();
+            refreshTableShared();
         }
     }//GEN-LAST:event_deleteActionPerformed
 
@@ -764,9 +858,9 @@ public class Calendar_Panel extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable SharedTable;
     private javax.swing.JTable TargetTable;
     private javax.swing.JTable TimerTable;
-    private javax.swing.JTable TimerTable1;
     private javax.swing.JButton boolAdd;
     private Pane.CustomCalendar customCalendar1;
     private javax.swing.JButton delete;

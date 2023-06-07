@@ -11,9 +11,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.json.simple.JSONArray;
@@ -29,7 +28,7 @@ public class MainMenu {
     
     User session = new User();
     
-   Map <String, User> userMap = new HashMap<>();
+   ArrayList<String> UsernameList = new ArrayList<>();
 
     
     public User getUser(){
@@ -64,6 +63,12 @@ public class MainMenu {
         read();
         reeedSave();
         return session.getTimer();
+    }
+    
+    public LinkedList getShred(){
+        read();
+        reeedSave();
+        return session.getShared();
     }
     
     public void reeedSave(){
@@ -109,13 +114,8 @@ public class MainMenu {
     private void parseuList(JSONObject uList){
         JSONObject uListObj = (JSONObject) uList.get("user");
         String username = (String) uListObj.get("Username");
-        String password = (String) uListObj.get("Password");
-        String nick = (String) uListObj.get("Nick");
-        String uid = (String) uListObj.get("UID");
 
-        
-        User newUser = new User(username, password,nick,uid);
-        userMap.put(uid, newUser);
+        UsernameList.add(username);
     }
     
     private void parseSession(JSONObject uList){
@@ -129,8 +129,9 @@ public class MainMenu {
         session = sessionUser;
     }
     
-    public Map getUsersMap(){
-        return userMap;
+    public ArrayList getUsernameList(){
+        readUsers();
+        return UsernameList;
     }
     
     public void saveSelectedBoolean(TargetBoolean save){
