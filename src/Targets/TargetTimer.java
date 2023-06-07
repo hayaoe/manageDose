@@ -4,9 +4,6 @@
  */
 package Targets;
 
-
-import java.time.LocalTime;
-import java.util.Date;
 import org.json.simple.JSONObject;
 
 /**
@@ -15,13 +12,13 @@ import org.json.simple.JSONObject;
  */
 public class TargetTimer extends Target {
     
-    long durHour, durMin;
+    int durHour, durMin;
     
-    public void setDurHour(long Hour){
+    public void setDurHour(int Hour){
         this.durHour = Hour;
     }
     
-    public void setDurMin( long minute){
+    public void setDurMin( int minute){
         this.durMin = minute;
     }
     
@@ -41,11 +38,11 @@ public class TargetTimer extends Target {
         this.status = newStatus;
     }
     
-    public long getDurationHour(){
+    public int getDurationHour(){
         return this.durHour;
     }
     
-    public long getDurationMin(){
+    public int getDurationMin(){
         return this.durMin;
     }
     
@@ -53,13 +50,22 @@ public class TargetTimer extends Target {
         
     }
     
-    public TargetTimer(String name, String date, String category, long hour, long minute){
+    public TargetTimer(String name, String date, String category, int hour, int minute){
         this.targetName = name;
         this.date = date;
         this.category = category;
         this.durHour = hour;
         this.durMin = minute;
         this.status=-1;
+    }
+    
+    public TargetTimer(String name, String date, String category, int hour, int minute, int status){
+        this.targetName = name;
+        this.date = date;
+        this.category = category;
+        this.durHour = hour;
+        this.durMin = minute;
+        this.status = status;
     }
     
      public JSONObject toJsonObject(){
@@ -71,8 +77,8 @@ public class TargetTimer extends Target {
         jobject.put("durMin", durMin);
         jobject.put("status", status);
         
-        JSONObject targetShared = new JSONObject();
-        targetShared.put("targetTimer", jobject);
-        return targetShared;
+        JSONObject targetTimer = new JSONObject();
+        targetTimer.put("targetTimer", jobject);
+        return targetTimer;
     }
 }

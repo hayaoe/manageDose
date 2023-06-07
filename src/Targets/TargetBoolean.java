@@ -39,6 +39,13 @@ public class TargetBoolean extends Target {
         this.status=-1;
     }
     
+    public TargetBoolean(String name, String date, String category, int status){
+        this.targetName = name;
+        this.date = date;
+        this.category = category;
+        this.status= status;
+    }
+    
     public JSONObject toJsonObject(){
         JSONObject jobject = new JSONObject();
         jobject.put("name", targetName);

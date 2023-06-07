@@ -27,7 +27,7 @@ import org.json.simple.parser.ParseException;
 public class Main {
     
     LinkedList <User> users = new LinkedList<>();
-    User admin = new User();
+    User session = new User();
     
     
     public boolean register(String username, String password){
@@ -55,10 +55,6 @@ public class Main {
     public int login(String username, String password){
         
         read();
-        admin.setPassword("admin");
-        admin.setUsername("admin");
-        admin.setNick("admin");
-        users.add(admin);
         
         int match = -1;
         int index = findUser(username);
@@ -74,9 +70,12 @@ public class Main {
         return match;
     }
     
-    public void userPassing(String username, String password){
-        Calendar_Panel cPanel = new Calendar_Panel();
-        cPanel.passingUser(username, password, username);
+    public void startSession(String username, String password){
+        
+        session = new User(username, password, username);
+        saveSession();
+        Calendar_Panel cpanel = new Calendar_Panel();
+        cpanel.setVisible(true);
     }
     
     private int findUser(String username){
@@ -102,6 +101,18 @@ public class Main {
         }
         return sameName;
     }
+    
+    private void saveSession(){
+        JSONObject obj;
+        
+        obj = session.toJsonObject();
+        
+        try(FileWriter file = new FileWriter("session.json")){
+            file.write(obj.toJSONString());
+        }catch(IOException e ){
+        }
+        
+    }
         
     
     private void save(){
@@ -124,7 +135,7 @@ public class Main {
             
             Object object = jparser.parse(fReader);
             JSONArray uList = (JSONArray) object;
-            System.out.println(uList);
+            
             
             uList.forEach(use -> parseuList((JSONObject)use));
             

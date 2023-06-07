@@ -31,13 +31,27 @@ public class User {
     private LinkedList<TargetShared> listShared;
 
     public User(String name, String pass, String nick) {
+       
         this.listBool = new LinkedList<>();
         this.listTimer = new LinkedList<>();
         this.listShared = new LinkedList<>();
+        
         this.Username = name;
         this.Password = pass;
         this.Nick = nick;
         
+    }
+    
+    public void readSave(){
+        
+        String path = this.Username+"BoolTarget.json";
+        readBool(path);
+        path = this.Username+"TimerTarget.json";
+        readTimer(path);
+        saveBoolean();
+        saveTimer();
+        System.out.println(listBool.size());
+        System.out.println(listTimer.size());
     }
 
     public User() {
@@ -74,13 +88,15 @@ public class User {
     }
 
     public void addTargetBoolean(String targetName, String category, String dueDate) {
+        String path = this.Username+"BoolTarget.json";
+        readBool(path);
         TargetBoolean newTBool;
         newTBool = new TargetBoolean(targetName,dueDate,category);
         listBool.add(newTBool);
-        
+
         saveBoolean();
-        String path = this.Username+"BoolTarget.json";
-        read(path);
+        path = this.Username+"BoolTarget.json";
+        readBool(path);
     }
 
     public void addTargetShared(TargetShared target) {
@@ -89,21 +105,33 @@ public class User {
         
         saveShared();
         String path = this.Username+"SharedTarget.json";
-        read(path);
+//        read(path);
     }
 
-    public void addTargetTimer(String targetName, String category, String dueDate, long hour, long minute) {
+    public void addTargetTimer(String targetName, String category, String dueDate, int hour, int minute) {
+        String path = this.Username+"TimerTarget.json";
+        readTimer(path);
+        
         TargetTimer newTimer;
         newTimer = new TargetTimer(targetName,dueDate,category, hour, minute);
         listTimer.add(newTimer);
+        System.out.println(listTimer.peekLast().getStatus()+" status target pertama");
         
         saveTimer();
-        String path = this.Username+"TimerTarget.json";
-        read(path);
+        path = this.Username+"TimerTarget.json";
+        readTimer(path);
     }
 
     public void deleteTarget() {
 
+    }
+    
+    public LinkedList getBool(){
+        return this.listBool;
+    }
+    
+    public LinkedList getTimer(){
+        return this.listTimer;
     }
 
     public JSONObject toJsonObject() {
@@ -169,15 +197,15 @@ public class User {
         
     }
     
-    private void read(String path){
+    private void readBool(String path){
         JSONParser jparser = new JSONParser();
         
         try(FileReader fReader = new FileReader(path)){
             
             Object object = jparser.parse(fReader);
             JSONArray uList = (JSONArray) object;
-            System.out.println(uList);
             
+            uList.forEach(use -> parseBoolean((JSONObject)use));
             
             
         } catch (FileNotFoundException ex) {
@@ -185,6 +213,53 @@ public class User {
         } catch (IOException | ParseException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    private void parseBoolean(JSONObject uList){
+        JSONObject uListObj = (JSONObject) uList.get("targetBool");
+        String date = (String) uListObj.get("date");
+        String name = (String) uListObj.get("name");
+        String kategory = (String) uListObj.get("category");
+        Long status = (Long) uListObj.get("status");
+        Integer stats = status.intValue();
+
+        
+        TargetBoolean updateBoolean = new TargetBoolean(name, date,kategory,stats);
+        listBool.add(updateBoolean);
+    }
+    
+    private void readTimer(String path){
+        JSONParser jparser = new JSONParser();
+        
+        try(FileReader fReader = new FileReader(path)){
+            
+            Object object = jparser.parse(fReader);
+            JSONArray uList = (JSONArray) object;
+            
+            uList.forEach(use -> parseTimer((JSONObject)use));
+            
+            
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException | ParseException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void parseTimer(JSONObject uList){
+        JSONObject uListObj = (JSONObject) uList.get("targetTimer");
+        String date = (String) uListObj.get("date");
+        String name = (String) uListObj.get("name");
+        String kategory = (String) uListObj.get("category");
+        Long hour = (Long) uListObj.get("durHour");
+        Long minute = (Long) uListObj.get("durMin");
+        Long status = (Long) uListObj.get("status");
+        Integer stats = status.intValue();
+        Integer jam = hour.intValue();
+        Integer menit = minute.intValue();
+        
+        TargetTimer updateTimer = new TargetTimer(name, date,kategory, jam, menit, stats);
+        listTimer.add(updateTimer);
     }
 
 }

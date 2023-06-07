@@ -31,7 +31,6 @@ public class InputTargetCheck extends javax.swing.JFrame {
     }
     
     public TargetBoolean returnData(){
-        System.out.println(target.getTargetName());
         return target;
     }
         

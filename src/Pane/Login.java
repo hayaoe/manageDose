@@ -172,9 +172,8 @@ public class Login extends javax.swing.JFrame {
         if (loged == -1) {
             JOptionPane.showMessageDialog(this, "User atau Password tidak sesuai", "login error", JOptionPane.ERROR_MESSAGE);
         }else{
-            Calendar_Panel calendar = new Calendar_Panel();
-            calendar.setVisible(true);
-            main.userPassing(inputUser.getText(), password);
+            
+            main.startSession(inputUser.getText(), password);
             this.dispose();
         }
     }//GEN-LAST:event_bt_loginActionPerformed

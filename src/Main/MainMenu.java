@@ -9,10 +9,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Date;
+import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -26,36 +25,45 @@ public class MainMenu {
     User session = new User();
     
     
-    public void startSession(String username, String password){
-        
-        session = new User(username, password, username);
-        save();
+
+    
+    public User getUser(){
+        read();
+        session.readSave();
+        return session;
     }
+    
     
     public void saveBoolTarget(String name, String category, String date){
         
         read();
         session.addTargetBoolean(name, category, date);
-        save();
+        
+        
     }
     
-    public void saveTimerTarget(String name, String category, String date, long hour, long min){
+    public void saveTimerTarget(String name, String category, String date, int hour, int min){
         
         read();
         session.addTargetTimer(name, category, date, hour, min);
-        save();
+        
     }
     
-    private void save(){
-        JSONObject obj;
-        
-        obj = session.toJsonObject();
-        
-        try(FileWriter file = new FileWriter("session.json")){
-            file.write(obj.toJSONString());
-        }catch(IOException e ){
-        }
-        
+    public LinkedList getBool(){
+        read();
+        session.readSave();
+        return session.getBool();
+    }
+    
+    public LinkedList getTimer(){
+        read();
+        session.readSave();
+        return session.getTimer();
+    }
+    
+    public void readSave(){
+        read();
+        session.readSave();
     }
     
     private void read(){

@@ -27,12 +27,11 @@ public class InputTargetTimer extends javax.swing.JFrame {
     
     private TargetTimer target;
     
-    public void returnKeMainFrame(String name, String category, String date, long hour, long min){
+    public void returnKeMainFrame(String name, String category, String date, int hour, int min){
         target = new TargetTimer(name, date, category, hour, min);
     }
     
     public TargetTimer returnData(){
-        System.out.println(target.getTargetName());
         return target;
     }
         
@@ -162,10 +161,11 @@ public class InputTargetTimer extends javax.swing.JFrame {
                     .addComponent(jLabel5)
                     .addComponent(jLabel6))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(KomboMenit, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(komboJam, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel7)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(KomboMenit, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(komboJam, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(CreateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -191,8 +191,8 @@ public class InputTargetTimer extends javax.swing.JFrame {
         String nama = targetName.getText();
         String category = Category.getItemAt(index);
         Date date = dueDate.getDate();
-        int jam = (Integer)komboJam.getSelectedItem();
-        int menit = (Integer)KomboMenit.getSelectedItem();
+        int jam = (int)komboJam.getSelectedItem();
+        int menit = (int)KomboMenit.getSelectedItem();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         String formatedDate = dateFormat.format(date);
         
