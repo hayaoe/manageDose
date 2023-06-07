@@ -37,13 +37,15 @@ public class TargetBoolean extends Target {
         this.date = date;
         this.category = category;
         this.status=-1;
+        this.UID = generatorUID();
     }
     
-    public TargetBoolean(String name, String date, String category, int status){
+    public TargetBoolean(String name, String date, String category, int status, String UID){
         this.targetName = name;
         this.date = date;
         this.category = category;
         this.status= status;
+        this.UID = UID;
     }
     
     public JSONObject toJsonObject(){

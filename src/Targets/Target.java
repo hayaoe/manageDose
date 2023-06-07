@@ -5,6 +5,7 @@
 package Targets;
 
 import java.util.Date;
+import java.util.UUID;
 
 
 
@@ -34,5 +35,16 @@ abstract class Target {
     public int getStatus(){
         return this.status;
     }
-        
+    
+    public String getUID(){
+        return this.UID;
+    }
+    
+    public String generatorUID(){
+        UUID randomId = UUID.randomUUID();
+
+        // Mengonversi UUID menjadi string
+        String idString = randomId.toString();
+        return idString;
+    }
 }

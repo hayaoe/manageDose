@@ -53,6 +53,17 @@ public class User {
         System.out.println(listBool.size());
         System.out.println(listTimer.size());
     }
+    
+    public void SaveRead(){
+        saveBoolean();
+        saveTimer();
+        System.out.println(listBool.size());
+        System.out.println(listTimer.size());
+        String path = this.Username+"BoolTarget.json";
+        readBool(path);
+        path = this.Username+"TimerTarget.json";
+        readTimer(path);
+    }
 
     public User() {
         this.listBool = new LinkedList<>();
@@ -204,7 +215,7 @@ public class User {
             
             Object object = jparser.parse(fReader);
             JSONArray uList = (JSONArray) object;
-            
+            System.out.println(uList);
             uList.forEach(use -> parseBoolean((JSONObject)use));
             
             
@@ -221,10 +232,11 @@ public class User {
         String name = (String) uListObj.get("name");
         String kategory = (String) uListObj.get("category");
         Long status = (Long) uListObj.get("status");
+        String id = (String) uListObj.get("UID");
         Integer stats = status.intValue();
 
         
-        TargetBoolean updateBoolean = new TargetBoolean(name, date,kategory,stats);
+        TargetBoolean updateBoolean = new TargetBoolean(name, date,kategory,stats, id);
         listBool.add(updateBoolean);
     }
     
@@ -254,11 +266,12 @@ public class User {
         Long hour = (Long) uListObj.get("durHour");
         Long minute = (Long) uListObj.get("durMin");
         Long status = (Long) uListObj.get("status");
+        String id = (String) uListObj.get("UID");
         Integer stats = status.intValue();
         Integer jam = hour.intValue();
         Integer menit = minute.intValue();
         
-        TargetTimer updateTimer = new TargetTimer(name, date,kategory, jam, menit, stats);
+        TargetTimer updateTimer = new TargetTimer(name, date,kategory, jam, menit, stats, id);
         listTimer.add(updateTimer);
     }
 

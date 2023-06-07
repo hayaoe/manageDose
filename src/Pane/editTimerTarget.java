@@ -4,7 +4,8 @@
  */
 package Pane;
 
-import Targets.TargetBoolean;
+
+import Targets.TargetTimer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -13,47 +14,60 @@ import java.util.Date;
  *
  * @author rabirabichannel
  */
-public class editCheckTarget extends javax.swing.JFrame {
+public class editTimerTarget extends javax.swing.JFrame {
 
     /**
      * Creates new form InputTargetCheck
      */
-    public editCheckTarget() {
+    public editTimerTarget() {
         initComponents();
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     }
     
-    Datas datas;
+    
+     Datas datas;
     public class Datas{
         
-        private String nama;
-        private String kategori;
-        public Datas(String name,String category){
+        private String nama, kategori;
+        private int hour, minute;
+        public Datas(String name,String category, int jam, int menit){
             nama = name;
             kategori =  category;
+            hour =jam;
+            minute = menit;
         }
         
-        public String getName(){
+        public String getNama(){
             return nama;
         }
         
         public String getKategori(){
-            return kategori;
+            return nama;
         }
+        
+        public int getHour(){
+            return hour;
+        }
+        
+        public int getMinute(){
+            return minute;
+        }
+        
     }
-    public void returnKeMainFrame(String name, String category){
-        datas = new Datas(name,category);
+    public void returnKeMainFrame(String name, String category, int hour, int minute){
+        datas = new Datas(name,category, hour, minute);
     }
     
     public Datas returnData(){
         return datas;
     }
     
-    public void passData(String nama, String kategori, String date){
-        targetName.setText(nama);
-        Category.setSelectedItem(kategori);
+    public void passData(String name, String category, int hour, int minute, String date){
+        targetName.setText(name);
+        Category.setSelectedItem(category);
+        komboJam.setSelectedItem(hour);
+        KomboMenit.setSelectedItem(minute);
         DueDate.setText(date);
-        
     }
         
 
@@ -78,6 +92,12 @@ public class editCheckTarget extends javax.swing.JFrame {
         CreateButton = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         Category = new javax.swing.JComboBox<>();
+        komboJam = new javax.swing.JComboBox<>();
+        KomboMenit = new javax.swing.JComboBox<>();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
         DueDate = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -99,7 +119,19 @@ public class editCheckTarget extends javax.swing.JFrame {
 
         Category.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Personal", "Team", "Weekly", "Daily" }));
 
-        DueDate.setText("DueDate");
+        komboJam.setModel(new javax.swing.DefaultComboBoxModel<>(new Integer[] { 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24} ));
+
+        KomboMenit.setModel(new javax.swing.DefaultComboBoxModel<>(new Integer[] {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59}));
+
+        jLabel4.setText("DURASI");
+
+        jLabel5.setText("JAM");
+
+        jLabel6.setText("MENIT");
+
+        jLabel7.setText(":");
+
+        DueDate.setText("Due Date");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -110,24 +142,40 @@ public class editCheckTarget extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(Category, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(targetName)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel2)
                                     .addComponent(jLabel1)
                                     .addComponent(jLabel3))
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(Category, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(targetName)))
+                                .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(89, 89, 89)
-                                .addComponent(CreateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(121, 121, 121)
+                                .addComponent(jLabel4))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(114, 114, 114)
-                                .addComponent(DueDate)))
-                        .addGap(0, 94, Short.MAX_VALUE)))
+                                .addGap(66, 66, 66)
+                                .addComponent(komboJam, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(9, 9, 9)
+                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 6, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(3, 3, 3)
+                                .addComponent(KomboMenit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(89, 89, 89)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(DueDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel5)
+                                        .addGap(55, 55, 55)
+                                        .addComponent(jLabel6)))))
+                        .addGap(0, 60, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(94, 94, 94)
+                .addComponent(CreateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -141,12 +189,23 @@ public class editCheckTarget extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(Category, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(DueDate)
-                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(DueDate))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel4)
+                .addGap(5, 5, 5)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(komboJam, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(KomboMenit, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(CreateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(59, 59, 59))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -157,7 +216,7 @@ public class editCheckTarget extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -168,9 +227,10 @@ public class editCheckTarget extends javax.swing.JFrame {
         int index = Category.getSelectedIndex();
         String nama = targetName.getText();
         String category = Category.getItemAt(index);
-        returnKeMainFrame(nama,category);
+        int jam = (int)komboJam.getSelectedItem();
+        int menit = (int)KomboMenit.getSelectedItem();
         
-        
+        returnKeMainFrame(nama, category, jam, menit);
         
         
 //        System.out.println(this.logged.getUsername());
@@ -195,14 +255,16 @@ public class editCheckTarget extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(editCheckTarget.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(editTimerTarget.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(editCheckTarget.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(editTimerTarget.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(editCheckTarget.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(editTimerTarget.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(editCheckTarget.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(editTimerTarget.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
@@ -210,7 +272,7 @@ public class editCheckTarget extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
 
-                new editCheckTarget().setVisible(true);
+                new editTimerTarget().setVisible(true);
                 
                 
             }
@@ -221,6 +283,7 @@ public class editCheckTarget extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> Category;
     private javax.swing.JButton CreateButton;
     private javax.swing.JLabel DueDate;
+    private javax.swing.JComboBox<Integer> KomboMenit;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.ButtonGroup buttonGroup3;
@@ -229,7 +292,12 @@ public class editCheckTarget extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JComboBox<Integer> komboJam;
     private javax.swing.JTextField targetName;
     // End of variables declaration//GEN-END:variables
 }

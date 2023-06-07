@@ -57,15 +57,17 @@ public class TargetTimer extends Target {
         this.durHour = hour;
         this.durMin = minute;
         this.status=-1;
+        this.UID = generatorUID();
     }
     
-    public TargetTimer(String name, String date, String category, int hour, int minute, int status){
+    public TargetTimer(String name, String date, String category, int hour, int minute, int status, String UID){
         this.targetName = name;
         this.date = date;
         this.category = category;
         this.durHour = hour;
         this.durMin = minute;
         this.status = status;
+        this.UID =UID;
     }
     
      public JSONObject toJsonObject(){
@@ -76,6 +78,7 @@ public class TargetTimer extends Target {
         jobject.put("durHour", durHour);
         jobject.put("durMin", durMin);
         jobject.put("status", status);
+        jobject.put("UID", UID);
         
         JSONObject targetTimer = new JSONObject();
         targetTimer.put("targetTimer", jobject);
