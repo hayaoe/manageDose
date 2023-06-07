@@ -14,24 +14,28 @@ import org.json.simple.JSONObject;
  */
 public class TargetShared extends Target{
     
+    String owner;
     public TargetShared(){
         
     }
     
-    public TargetShared(String name, String date, String category){
+    public TargetShared(String name, String date, String category, String UID, String owner){
         this.targetName = name;
         this.date = date;
         this.category = category;
         this.UID = UID;
         this.status=-1;
+        this.owner = owner;
     }
     
+    @Override
     public JSONObject toJsonObject(){
         JSONObject jobject = new JSONObject();
         jobject.put("name", targetName);
         jobject.put("date", date);
         jobject.put("category", category);
         jobject.put("status", status);
+        jobject.put("owner",owner);
         jobject.put("UID", UID);
         
         JSONObject targetShared = new JSONObject();

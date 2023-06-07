@@ -6,8 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Date;
 import java.util.LinkedList;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.json.simple.JSONArray;
@@ -30,6 +30,8 @@ public class User {
     private LinkedList<TargetTimer> listTimer;
     private LinkedList<TargetShared> listShared;
 
+    
+    private LinkedList<Target> listTarget;
     public User(String name, String pass, String nick) {
        
         this.listBool = new LinkedList<>();
@@ -39,7 +41,25 @@ public class User {
         this.Username = name;
         this.Password = pass;
         this.Nick = nick;
+        this.UID = generatorUID();
         
+    }
+    
+    public User(String name, String pass, String nick, String UID) {
+        
+        this.Username = name;
+        this.Password = pass;
+        this.Nick = nick;
+        this.UID = UID;
+        
+    }
+    
+    private String generatorUID(){
+        UUID randomId = UUID.randomUUID();
+
+        // Mengonversi UUID menjadi string
+        String idString = randomId.toString();
+        return idString;
     }
     
     public void readSave(){
@@ -66,7 +86,7 @@ public class User {
     }
 
     public User() {
-        this.listBool = new LinkedList<>();
+        
 
     }
 
@@ -143,6 +163,10 @@ public class User {
     
     public LinkedList getTimer(){
         return this.listTimer;
+    }
+    
+    public LinkedList getShared(){
+        return this.listShared;
     }
 
     public JSONObject toJsonObject() {
@@ -274,5 +298,37 @@ public class User {
         TargetTimer updateTimer = new TargetTimer(name, date,kategory, jam, menit, stats, id);
         listTimer.add(updateTimer);
     }
+    
+    private void readShared(String path){
+        JSONParser jparser = new JSONParser();
+        
+        try(FileReader fReader = new FileReader(path)){
+            
+            Object object = jparser.parse(fReader);
+            JSONArray uList = (JSONArray) object;
+            System.out.println(uList);
+            uList.forEach(use -> parseShared((JSONObject)use));
+            
+            
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException | ParseException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void parseShared(JSONObject uList){
+        JSONObject uListObj = (JSONObject) uList.get("targetShared");
+        String date = (String) uListObj.get("date");
+        String name = (String) uListObj.get("name");
+        String kategory = (String) uListObj.get("category");
+        String pemilik = (String) uListObj.get("owner");
+        String id = (String) uListObj.get("UID");
+
+        
+        TargetShared updateShared = new TargetShared(name, date,kategory, id, pemilik);
+        listShared.add(updateShared);
+    }
+    
 
 }

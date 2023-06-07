@@ -48,6 +48,7 @@ public class TargetBoolean extends Target {
         this.UID = UID;
     }
     
+    @Override
     public JSONObject toJsonObject(){
         JSONObject jobject = new JSONObject();
         jobject.put("name", targetName);

@@ -11,7 +11,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.json.simple.JSONArray;
@@ -27,7 +29,7 @@ public class MainMenu {
     
     User session = new User();
     
-    
+   Map <String, User> userMap = new HashMap<>();
 
     
     public User getUser(){
@@ -77,7 +79,25 @@ public class MainMenu {
             JSONObject jobj = (JSONObject)object;
             System.out.println(jobj);
             
-            parseuList(jobj);
+            parseSession(jobj);
+            
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException | ParseException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void readUsers(){
+        JSONParser jparser = new JSONParser();
+        
+        try(FileReader fReader = new FileReader("user.json")){
+            
+            Object object = jparser.parse(fReader);
+            JSONArray uList = (JSONArray) object;
+            
+            uList.forEach(use -> parseuList((JSONObject)use));
+            
             
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
@@ -91,10 +111,26 @@ public class MainMenu {
         String username = (String) uListObj.get("Username");
         String password = (String) uListObj.get("Password");
         String nick = (String) uListObj.get("Nick");
+        String uid = (String) uListObj.get("UID");
+
+        
+        User newUser = new User(username, password,nick,uid);
+        userMap.put(uid, newUser);
+    }
+    
+    private void parseSession(JSONObject uList){
+        JSONObject uListObj = (JSONObject) uList.get("user");
+        String username = (String) uListObj.get("Username");
+        String password = (String) uListObj.get("Password");
+        String nick = (String) uListObj.get("Nick");
 
         
         User sessionUser = new User(username, password,nick);
         session = sessionUser;
+    }
+    
+    public Map getUsersMap(){
+        return userMap;
     }
     
     public void saveSelectedBoolean(TargetBoolean save){
@@ -161,7 +197,7 @@ public class MainMenu {
             
             Object object = jparser.parse(fReader);
             selected = parseTimer((JSONObject)object);
-            
+            System.out.println(selected);
             
             
         } catch (FileNotFoundException ex) {

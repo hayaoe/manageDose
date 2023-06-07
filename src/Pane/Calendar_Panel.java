@@ -24,8 +24,6 @@ public class Calendar_Panel extends javax.swing.JFrame {
      */
     MainMenu main = new MainMenu();
 
-    ;
-
     public Calendar_Panel() {
         initComponents();
         refreshTableTimer();
@@ -58,6 +56,44 @@ public class Calendar_Panel extends javax.swing.JFrame {
             tabelTimer.addRow(targets);
         }
     }
+    
+    private void refreshTableBool() {
+        User session = main.getUser();
+        String status;
+        String colNameBool[] = {"Target", "Tanggal", "Category", "Status", "UID"};
+        DefaultTableModel tabelBool = new DefaultTableModel(colNameBool, 0);
+        TargetTable.setModel(tabelBool);
+        for (int i = 0; i < session.getBool().size(); i++) {
+            TargetBoolean dataBool = (TargetBoolean) session.getBool().get(i);
+            if (dataBool.getStatus() != 1) {
+                status = "not Finished";
+            } else {
+                status = "Finished";
+            }
+
+            String targets[] = {dataBool.getTargetName(), dataBool.getDate(), dataBool.getCategory(), status, dataBool.getUID()};
+            tabelBool.addRow(targets);
+        }
+    }
+    
+    private void refreshTableShared() {
+        User session = main.getUser();
+        String status;
+        String colNameShared[] = {"Target", "Tanggal", "Category", "Status", "From"};
+        DefaultTableModel tabelShared = new DefaultTableModel(colNameShared, 0);
+        TargetTable.setModel(tabelShared);
+        for (int i = 0; i < session.getShared().size(); i++) {
+            TargetBoolean dataBool = (TargetBoolean) session.getBool().get(i);
+            if (dataBool.getStatus() != 1) {
+                status = "not Finished";
+            } else { 
+                status = "Finished";
+            }
+
+            String targets[] = {dataBool.getTargetName(), dataBool.getDate(), dataBool.getCategory(), status, dataBool.getUID()};
+            tabelBool.addRow(targets);
+        }
+    }
 
     private void updateStatus(String UID) {
         User session = main.getUser();
@@ -81,7 +117,7 @@ public class Calendar_Panel extends javax.swing.JFrame {
 
         session.SaveRead();
     }
-    
+
     private void boolUpdate(String UID, String newName, String newCat) {
         User session = main.getUser();
         TargetBoolean temp = null;
@@ -97,7 +133,7 @@ public class Calendar_Panel extends javax.swing.JFrame {
         }
         session.SaveRead();
     }
-     
+
     private void timerUpdate(String UID, String newName, String newCat, int newHour, int newMinute) {
         User session = main.getUser();
         TargetTimer temp = null;
@@ -115,7 +151,6 @@ public class Calendar_Panel extends javax.swing.JFrame {
         }
         session.SaveRead();
     }
-      
 
     private TargetBoolean boolGetter(String UID) {
         User session = main.getUser();
@@ -145,24 +180,33 @@ public class Calendar_Panel extends javax.swing.JFrame {
         return temp;
     }
 
-    private void refreshTableBool() {
+    private void deleteTarget(String UID) {
         User session = main.getUser();
-        String status;
-        String colNameBool[] = {"Target", "Tanggal", "Category", "Status", "UID"};
-        DefaultTableModel tabelBool = new DefaultTableModel(colNameBool, 0);
-        TargetTable.setModel(tabelBool);
-        for (int i = 0; i < session.getBool().size(); i++) {
-            TargetBoolean dataBool = (TargetBoolean) session.getBool().get(i);
-            if (dataBool.getStatus() != 1) {
-                status = "not Finished";
-            } else {
-                status = "Finished";
-            }
+        TargetTimer temp = null;
 
-            String targets[] = {dataBool.getTargetName(), dataBool.getDate(), dataBool.getCategory(), status, dataBool.getUID()};
-            tabelBool.addRow(targets);
+        for (int i = 0; i < session.getTimer().size(); i++) {
+            temp = (TargetTimer) session.getTimer().get(i);
+            if (temp.getUID().equals(UID)) {
+
+                session.getTimer().remove(temp);
+
+            }
         }
+
+        TargetBoolean temp2 = null;
+
+        for (int i = 0; i < session.getBool().size(); i++) {
+            temp2 = (TargetBoolean) session.getBool().get(i);
+            if (temp2.getUID().equals(UID)) {
+
+                session.getBool().remove(temp2);
+            }
+        }
+
+        session.SaveRead();
     }
+
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -190,6 +234,7 @@ public class Calendar_Panel extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         customCalendar1 = new Pane.CustomCalendar();
         recent = new javax.swing.JLabel();
+        delete = new javax.swing.JButton();
 
         jButton1.setText("jButton1");
 
@@ -251,6 +296,9 @@ public class Calendar_Panel extends javax.swing.JFrame {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 TimerTableMouseClicked(evt);
             }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                TimerTableMousePressed(evt);
+            }
         });
         jScrollPane2.setViewportView(TimerTable);
         if (TimerTable.getColumnModel().getColumnCount() > 0) {
@@ -289,6 +337,9 @@ public class Calendar_Panel extends javax.swing.JFrame {
         TargetTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 TargetTableMouseClicked(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                TargetTableMousePressed(evt);
             }
         });
         jScrollPane3.setViewportView(TargetTable);
@@ -353,48 +404,58 @@ public class Calendar_Panel extends javax.swing.JFrame {
 
         recent.setText("Please Select");
 
+        delete.setText("Delete");
+        delete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(customCalendar1, javax.swing.GroupLayout.PREFERRED_SIZE, 916, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(boolAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(timerAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(editBt, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(selectTarget, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(customCalendar1, javax.swing.GroupLayout.PREFERRED_SIZE, 916, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(2, 2, 2)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane2)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(161, 161, 161)
-                                .addComponent(jLabel2)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 407, Short.MAX_VALUE)
-                                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 407, Short.MAX_VALUE)
-                                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 407, Short.MAX_VALUE))))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(159, 159, 159)
+                                        .addComponent(jLabel2))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(4, 4, 4)
+                                        .addComponent(delete, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(shareBt, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(0, 0, Short.MAX_VALUE)))
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(165, 165, 165)
+                        .addGap(163, 163, 163)
                         .addComponent(jLabel3)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(160, 160, 160)
+                        .addGap(158, 158, 158)
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(recent)
                         .addGap(24, 24, 24))))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(boolAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(timerAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(editBt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(selectTarget, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(shareBt, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -422,8 +483,9 @@ public class Calendar_Panel extends javax.swing.JFrame {
                     .addComponent(selectTarget, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(editBt, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(timerAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(boolAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(boolAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(delete, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         pack();
@@ -504,18 +566,18 @@ public class Calendar_Panel extends javax.swing.JFrame {
                     @Override
                     public void windowClosed(WindowEvent e) {
 
-                      Datas datas = ct.returnData();
+                        Datas datas = ct.returnData();
 
-                      boolUpdate(uid, datas.getName(),datas.getKategori());
-                      refreshTableTimer();
-                      refreshTableBool();
+                        boolUpdate(uid, datas.getName(), datas.getKategori());
+                        refreshTableTimer();
+                        refreshTableBool();
                     }
                 });
             }
         } else if (select.equals("TargetTimer")) {
             if (main.readSelectedTimer() != null) {
                 editTimerTarget ct = new editTimerTarget();
-                
+
                 TargetTimer target = main.readSelectedTimer();
                 String nama = target.getTargetName();
                 String kategori = target.getCategory();
@@ -531,8 +593,8 @@ public class Calendar_Panel extends javax.swing.JFrame {
                     public void windowClosed(WindowEvent e) {
 
                         editTimerTarget.Datas datas = ct.returnData();
-                        timerUpdate(uid,datas.getNama(),datas.getKategori(),datas.getHour(),datas.getMinute());
-                        
+                        timerUpdate(uid, datas.getNama(), datas.getKategori(), datas.getHour(), datas.getMinute());
+
                         refreshTableTimer();
                         refreshTableBool();
                     }
@@ -579,14 +641,17 @@ public class Calendar_Panel extends javax.swing.JFrame {
             }
         } else if (select.equals("TargetTimer")) {
             if (main.readSelectedTimer() != null) {
-                selectCheckTarget ct = new selectCheckTarget();
-                
+                TimerTarget ct = new TimerTarget();
+
                 TargetTimer target = main.readSelectedTimer();
                 String nama = target.getTargetName();
                 String kategori = target.getCategory();
                 String tanggal = target.getDate();
                 String uid = target.getUID();
+                int jam = target.getDurationHour();
+                int minute = target.getDurationMin();
                 String status;
+
                 if (target.getStatus() != 1) {
                     status = "not Finished";
                 } else {
@@ -594,15 +659,20 @@ public class Calendar_Panel extends javax.swing.JFrame {
                 }
 
                 ct.setVisible(true);
-                ct.passData(nama, kategori, tanggal, status);
+                System.out.println(jam);
+                System.out.println(minute);
+                System.out.println("ini jam " + jam);
+                System.out.println("ini Menit" + minute);
+                ct.passData(nama, kategori, tanggal, jam, minute);
                 ct.addWindowListener(new WindowAdapter() {
                     @Override
                     public void windowClosed(WindowEvent e) {
 
-                        boolean update = ct.returnStatus();
-                        if (update == true) {
+                        TimerTarget.Datas datas = ct.returnData();
+                        if (datas.getHour() == 0 && datas.getMinute() == 0) {
                             updateStatus(uid);
                         }
+                        timerUpdate(uid, nama, kategori, datas.getHour(), datas.getMinute());
 
                         refreshTableTimer();
                         refreshTableBool();
@@ -617,12 +687,48 @@ public class Calendar_Panel extends javax.swing.JFrame {
     private void TimerTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TimerTableMouseClicked
         // TODO add your handling code here:
         int row = TimerTable.getSelectedRow();
-        String uid = TimerTable.getValueAt(row, 4).toString();
+        String uid = TimerTable.getValueAt(row, 5).toString();
 
         TargetTimer temp = timerGetter(uid);
         main.saveSelectedTimer(temp);
         recent.setText("TargetTimer");
     }//GEN-LAST:event_TimerTableMouseClicked
+
+    private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
+        // TODO add your handling code here:
+        String select = recent.getText();
+        if (main.readSelectedTimer() != null || main.readSelectedBool() != null) {
+            if (select.equals("TargetBoolean")) {
+                deleteTarget(main.readSelectedBool().getUID());
+
+            } else if (select.equals("TargetTimer")) {
+                deleteTarget(main.readSelectedTimer().getUID());
+            }
+
+            refreshTableTimer();
+            refreshTableBool();
+        }
+    }//GEN-LAST:event_deleteActionPerformed
+
+    private void TargetTableMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TargetTableMousePressed
+        // TODO add your handling code here:
+        int row = TargetTable.getSelectedRow();
+        String uid = TargetTable.getValueAt(row, 4).toString();
+
+        TargetBoolean temp = boolGetter(uid);
+        main.saveSelectedBoolean(temp);
+        recent.setText("TargetBoolean");
+    }//GEN-LAST:event_TargetTableMousePressed
+
+    private void TimerTableMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TimerTableMousePressed
+        // TODO add your handling code here:
+        int row = TimerTable.getSelectedRow();
+        String uid = TimerTable.getValueAt(row, 5).toString();
+
+        TargetTimer temp = timerGetter(uid);
+        main.saveSelectedTimer(temp);
+        recent.setText("TargetTimer");
+    }//GEN-LAST:event_TimerTableMousePressed
 
     /**
      * @param args the command line arguments
@@ -663,6 +769,7 @@ public class Calendar_Panel extends javax.swing.JFrame {
     private javax.swing.JTable TimerTable1;
     private javax.swing.JButton boolAdd;
     private Pane.CustomCalendar customCalendar1;
+    private javax.swing.JButton delete;
     private javax.swing.JButton editBt;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;

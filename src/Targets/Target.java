@@ -4,8 +4,9 @@
  */
 package Targets;
 
-import java.util.Date;
+
 import java.util.UUID;
+import org.json.simple.JSONObject;
 
 
 
@@ -13,7 +14,7 @@ import java.util.UUID;
  *
  * @author ABUKU
  */
-abstract class Target {
+public abstract class Target {
     
     String targetName, UID;
     String date;
@@ -40,7 +41,9 @@ abstract class Target {
         return this.UID;
     }
     
-    public String generatorUID(){
+    abstract JSONObject toJsonObject();
+    
+    protected String generatorUID(){
         UUID randomId = UUID.randomUUID();
 
         // Mengonversi UUID menjadi string
