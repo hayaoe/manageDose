@@ -224,7 +224,7 @@ public class Calendar_Panel extends javax.swing.JFrame {
         for (int i = 0; i < session.getBool().size(); i++) {
             temp2 = (TargetBoolean) session.getBool().get(i);
             if (temp2.getUID().equals(uid)) {
-                target = new TargetShared(temp2.getTargetName(), temp2.getDate(), temp2.getCategory(), username);
+                target = new TargetShared(temp2.getTargetName(), temp2.getDate(), temp2.getCategory(), session.getUsername());
                 System.out.println(target.getTargetName()+" ini nama target Shared");
             }
         }
@@ -240,7 +240,7 @@ public class Calendar_Panel extends javax.swing.JFrame {
         for (int i = 0; i < session.getTimer().size(); i++) {
             temp = (TargetTimer) session.getTimer().get(i);
             if (temp.getUID().equals(uid)) {
-                target = new TargetShared(temp.getTargetName(), temp.getDate(), temp.getCategory(), username);
+                target = new TargetShared(temp.getTargetName(), temp.getDate(), temp.getCategory(), session.getUsername());
                 System.out.println(target.getTargetName()+" ini nama target Shared");
             }
         }

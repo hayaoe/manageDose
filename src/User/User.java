@@ -54,31 +54,29 @@ public class User {
     }
     
     public void SharedReadSave(){
-        String path = this.Username+"SharedTarget.json";
-        readShared(path);
+        
         saveShared(this.Username);
     }
     
     public void readSave(){
         
         String path = this.Username+"SharedTarget.json";
-//        readShared(path);
+       readShared(path);
         path = this.Username+"BoolTarget.json";
         readBool(path);
         path = this.Username+"TimerTarget.json";
         readTimer(path);
+        saveShared(this.Username);
         saveBoolean();
         saveTimer();
-//        saveShared(this.Username);
-        System.out.println(listBool.size());
-        System.out.println(listTimer.size());
+        System.out.println(listBool.size()+" ini ukran list Boolean");
+        System.out.println(listTimer.size()+ " ini ukuran list Timer");
+        System.out.println(listShared.size()+ " ini ukuran list Shared");
         
     }
     
     public void SaveRead(){
        
-        
-      
         System.out.println(listBool.size());
         System.out.println(listTimer.size());
         System.out.println(listTimer.size());
@@ -88,9 +86,10 @@ public class User {
         readBool(path);
         path = this.Username+"TimerTarget.json";
         readTimer(path);
+        saveShared(this.Username);
         saveBoolean();
         saveTimer();
-        saveShared(this.Username);
+        
 
         
     }
@@ -149,6 +148,8 @@ public class User {
         saveShared(username);
         path = username+"SharedTarget.json";
         readShared(path);
+        
+        System.out.println(listShared.size()+" ini ukuran list Shared");
     }
 
     public void addTargetTimer(String targetName, String category, String dueDate, int hour, int minute) {

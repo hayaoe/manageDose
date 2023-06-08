@@ -73,7 +73,7 @@ public class InputTargetTimer extends javax.swing.JFrame {
 
         jLabel2.setText("CATEGORY");
 
-        CreateButton.setText("EDIT");
+        CreateButton.setText("Create");
         CreateButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 CreateButtonActionPerformed(evt);

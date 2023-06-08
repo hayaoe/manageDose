@@ -245,7 +245,7 @@ public class TimerTarget extends javax.swing.JFrame {
 
     private void btnStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartActionPerformed
         // TODO add your handling code here:
-        timer = new Timer(10, new ActionListener() {
+        timer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
